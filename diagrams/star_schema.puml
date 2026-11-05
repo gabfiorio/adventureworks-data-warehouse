@@ -1,0 +1,117 @@
+@startuml star_schema
+' Modelo Estrela - DW AdventureWorks (Vendas)
+' Renderizar: java -jar plantuml.jar star_schema.puml
+skinparam backgroundColor white
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor<<fato>> #1F4E79
+  FontColor<<fato>> white
+  AttributeFontColor<<fato>> white
+  StereotypeFontColor<<fato>> white
+  BackgroundColor<<dim>> #DDEBF7
+  BorderColor #1F4E79
+  ArrowColor #555555
+}
+hide circle
+hide methods
+
+entity "dw.fato_vendas" as f <<fato>> {
+  chave_venda : bigserial <<PK>>
+  --
+  chave_data_pedido : int <<FK>>
+  chave_data_envio : int <<FK>>
+  chave_data_vencimento : int <<FK>>
+  chave_cliente : int <<FK>>
+  chave_produto : int <<FK>>
+  chave_vendedor : int <<FK>>
+  chave_territorio : int <<FK>>
+  chave_promocao : int <<FK>>
+  chave_metodo_envio : int <<FK>>
+  --
+  id_detalhe_pedido : int <<UK, degenerada>>
+  numero_pedido : varchar <<degenerada>>
+  canal_venda : varchar <<degenerada>>
+  --
+  quantidade : int
+  preco_unitario : numeric
+  desconto_unitario_pct : numeric
+  valor_bruto : numeric
+  valor_desconto : numeric
+  valor_liquido : numeric
+  custo_total : numeric
+  valor_imposto : numeric
+  valor_frete : numeric
+  dias_para_envio : int
+  --
+  data_modificacao_origem : timestamp
+  data_carga : timestamp
+}
+
+entity "dw.dim_data" as dd <<dim>> {
+  chave_data : int <<PK>> (AAAAMMDD)
+  --
+  data_completa, dia, dia_semana,
+  nome_dia_semana, mes, nome_mes,
+  ano_mes, trimestre, semestre, ano,
+  fim_de_semana, ano_fiscal,
+  trimestre_fiscal
+}
+
+entity "dw.dim_cliente" as dc <<dim>> {
+  chave_cliente : serial <<PK>>
+  --
+  id_cliente : int <<UK>>
+  nome_cliente, tipo_cliente,
+  cidade, estado_provincia, pais
+}
+
+entity "dw.dim_produto" as dp <<dim>> {
+  chave_produto : serial <<PK>>
+  --
+  id_produto : int <<UK>>
+  nome_produto, numero_produto, cor,
+  tamanho, subcategoria, categoria,
+  linha_produto, custo_padrao, preco_tabela
+}
+
+entity "dw.dim_vendedor" as dv <<dim>> {
+  chave_vendedor : serial <<PK>>
+  --
+  id_vendedor : int <<UK>>
+  nome_vendedor, cargo,
+  cota_vendas, comissao_pct
+}
+
+entity "dw.dim_territorio" as dt <<dim>> {
+  chave_territorio : serial <<PK>>
+  --
+  id_territorio : int <<UK>>
+  nome_territorio, pais, grupo_territorio
+}
+
+entity "dw.dim_promocao" as dpr <<dim>> {
+  chave_promocao : serial <<PK>>
+  --
+  id_promocao : int <<UK>>
+  descricao, percentual_desconto,
+  tipo_promocao, categoria_promocao,
+  data_inicio, data_fim
+}
+
+entity "dw.dim_metodo_envio" as dm <<dim>> {
+  chave_metodo_envio : serial <<PK>>
+  --
+  id_metodo_envio : int <<UK>>
+  nome_metodo_envio, taxa_base, taxa_por_kg
+}
+
+f }o-up-|| dd
+f }o-up-|| dc
+f }o-up-|| dp
+f }o-left-|| dv
+f }o-right-|| dt
+f }o-down-|| dpr
+f }o-down-|| dm
+@enduml
