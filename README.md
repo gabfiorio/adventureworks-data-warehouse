@@ -499,7 +499,7 @@ Recomenda-se incluir:
 
 ---
 
-## Autor
+## Autor - Gabriel Fiorio
 
 Projeto acadêmico desenvolvido como atividade de estudo de Data Warehouse, ETL, modelagem dimensional e Business Intelligence.
 
